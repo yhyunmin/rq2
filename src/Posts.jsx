@@ -68,9 +68,7 @@ export function Posts() {
           disabled={currentPage <= 1}
           onClick={() => {
             setCurrentPage(prev => prev - 1);
-          }}
-          Previous
-          page></button>
+          }}></button>
         <span>Page {currentPage + 1}</span>
         <button
           disabled={currentPage >= maxPostPage}
@@ -85,3 +83,18 @@ export function Posts() {
     </>
   );
 }
+
+// 0425 mutation
+//서버에 네트워크 호출해 서버에서 실제 데이터를 업데이트하는것
+// 즉 블로그 포스트 추가 , 삭제 포스트 제목 변경 ( CRUD)
+// 변경사항을 보여주거나, 볼수있게 발생했다는것 등록하는 방법
+// 낙관적 업데이트 : 호출이 잘될거라 가정하고 안됐을 경우 되돌리는방법
+// 서버에서받은 데이터를 가져와 변이호출을 실행할떄 업데이트된 데이터를 가져와 리액트 쿼리 캐시업데이트하기
+// 관련쿼리를 무효화하는 방법
+// 쿼리를 무효화하면 클라이언트데이터와 서버의데이터와 동기화하기위해 재요청을 함
+
+//  useMutation 사용
+// mutate를 반환함
+// query key가 필요없음 = 데이터를 저장하지 않음
+// isFetching은 없고 isLoading 은 있음
+//  useQuery는 기본 재시도 3번  여기는 없음 (설정으로 자동재시도 가능)

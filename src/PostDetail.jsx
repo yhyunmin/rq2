@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { fetchComments } from './api';
 import './PostDetail.css';
 
