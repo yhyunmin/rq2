@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { fetchPosts, deletePost, updatePost } from './api';
 import { PostDetail } from './PostDetail';
@@ -22,6 +22,17 @@ export function Posts() {
   //프리패칭 하는 훅
   const queryClient = useQueryClient();
 
+  // useMutation 하는법
+  const deleteMutation = useMutation({
+    mutationFn: postId => deletePost(postId),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: postId => updatePost(postId),
+  });
+
+  // deleteMutation.mutate
+  // updateMutation.mutate
   useEffect(() => {
     if (currentPage < maxPostPage) {
       // 미리 가져오려는 데이터
@@ -58,7 +69,11 @@ export function Posts() {
           <li
             key={post.id}
             className='post-title'
-            onClick={() => setSelectedPost(post)}>
+            onClick={() => {
+              deleteMutation.reset();
+              updateMutation.reset();
+              setSelectedPost(post);
+            }}>
             {post.title}
           </li>
         ))}
@@ -79,7 +94,13 @@ export function Posts() {
         </button>
       </div>
       <hr />
-      {selectedPost && <PostDetail post={selectedPost} />}
+      {selectedPost && (
+        <PostDetail
+          post={selectedPost}
+          deleteMutation={deleteMutation}
+          updateMutation={updateMutation}
+        />
+      )}
     </>
   );
 }

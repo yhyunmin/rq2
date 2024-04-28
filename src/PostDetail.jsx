@@ -11,7 +11,7 @@ import './PostDetail.css';
 //  퀴리키 에서 두번째 요소로, 키가 변경될떄마다 어떻게 처리할지 보여줌
 // 이경우 post.id 가 바뀔때마다 stale시간과 캐시시간을  갖게됨
 // 이때문에 데이터를 가져올 떄 쓰는 쿼리 함수의 모든 값이 키의 일부여야함
-export function PostDetail({ post }) {
+export function PostDetail({ post, deleteMutation, updateMutation }) {
   // replace with useQuery
   // const data = [];
   const { data, isError, isLoading, error } = useQuery({
@@ -28,7 +28,28 @@ export function PostDetail({ post }) {
   return (
     <>
       <h3 style={{ color: 'blue' }}>{post.title}</h3>
-      <button>Delete</button> <button>Update title</button>
+      <div>
+        <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
+        {deleteMutation.isPending && (
+          <p className='loading'>Deleting this Post</p>
+        )}
+        {deleteMutation.isError && (
+          <p className='error'>{deleteMutation.error.toString()}</p>
+        )}
+        {deleteMutation.isSuccess && <p className='success'>Deleted</p>}
+      </div>
+      <div>
+        <button onClick={() => updateMutation.mutate(post.id)}>
+          Update title
+        </button>
+        {updateMutation.isPending && (
+          <p className='loading'>Updating the title</p>
+        )}
+        {updateMutation.isError && (
+          <p className='error'>{updateMutation.error.toString()}</p>
+        )}
+        {updateMutation.isSuccess && <p className='success'>Updated</p>}
+      </div>
       <p>{post.body}</p>
       <h4>Comments</h4>
       {data.map(comment => (
